@@ -5,19 +5,18 @@ class Answer extends StatelessWidget {
   //de preferencia em usar o tipo
   //pois se nao colocar ir infereir do tipo
   //dynamic
-  String answer;
-  void Function()  handleAnswer;
+  final String answer;
+  final void Function()  handleAnswer;
 
-  Answer(this.answer,this.handleAnswer, {super.key});
+  const Answer(this.answer,this.handleAnswer, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return   SizedBox(
               width: double.infinity,
               child:
                 ElevatedButton(
                      onPressed: handleAnswer,
-                     child: Text(answer)
-                ));
+                     child: Text(answer)));
     }
 }

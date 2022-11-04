@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import "./question.dart";
-import "./anwser.dart";
+import "./quiz.dart";
+import "./results.dart";
 
 main(){
   runApp(const QuestionApp());
@@ -8,30 +8,50 @@ main(){
 
 class QuestionState extends State<QuestionApp>  {
   //VARS
-  late var _questionsSelected = 0;
-  late List<String> answers =  questions[_questionsSelected]["answer"] as List<String>;
+  late var _questionsIndexSelected = 0;
+  late String  _questionSelected = "What your color favorite?";
+  late List<String> answers =   ["Black", "Red", "Green", "White" ];
 
   var questions = [
     {
       "text": "What your color favorite?",
-      "answer": ["Black", "Red", "Green", "White" ],
+      "answer": [
+        {"text":"Black", "point": 10 },
+        {"text": "Red", "point": 7},
+        {"text":"Green", "point": 3},
+        {"texst":"White","point": 1},
+      ],
     },
     {
       "text": "What your animal favorite?",
-      "answer": ["Rabbit", "Snak", "Elephant", "Lyon" ],
+      "answer": [
+        {"text": "Rabbit","point":10},
+        {"text":"Snak","point":7},
+        {"text":"Elephant","point":3},
+        {"text":"Lyon","point":1}
+      ],
     },
     {
       "text": "What your instructor favorite?",
-      "answer": ["Maria", "João", "Leo", "Pedro" ],
+      "answer": [
+        {"text": "Maria","point":10},
+        {"text":"João","point": 7 },
+        {"text":"Leo","point":3},
+        {"text":"Pedro","point":  1}
+      ],
     },
   ];
 
   void handleAnswer() {
     setState(() {
-        _questionsSelected += 1;
-        if (_questionsSelected < questions.length) {
+        _questionsIndexSelected += 1;
+        if (_questionsIndexSelected < questions.length) {
           //para alterar a view precisa colocar dentro do setState
-          answers = questions[_questionsSelected]["answer"] as List<String>;
+          final  answerCurrent = questions[_questionsIndexSelected]["answer"] as List<Map<String,Object>>;
+          //para realizar o cast em outras linguages e com o  as
+          //aqui precisa realmente aplicar o cast()
+          answers =  answerCurrent.map((it) => it["text"]).toList().cast();
+          _questionSelected = questions[_questionsIndexSelected]["text"] as String;
         }
     });
 
@@ -47,21 +67,9 @@ class QuestionState extends State<QuestionApp>  {
         appBar: AppBar(
           title: const Text("Questions"),
         ),
-        body: _questionsSelected < questions.length  ?  Column(
-          children: [
-            Question(questions[_questionsSelected]["text"] as String),
-            //identico e feito em aplicacoes React native e React js
-            //diferenca que precisamos espalhar os valores com spreed operator
-            ...answers.map((it) =>
-                Answer(it, handleAnswer),
-            )
-          ],
-        ) : const Center(
-             child:  Text(
-                  "Congrullations",
-                  style: TextStyle(fontSize: 28),
-             ),
-        ),
+        body: _questionsIndexSelected < questions.length  ?
+           Quiz(answer: answers, question: _questionSelected, handleAnswer: handleAnswer)
+            : const Results("Congratulations")
       ),
     );
   }
