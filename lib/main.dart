@@ -10,7 +10,13 @@ class QuestionState extends State<QuestionApp>  {
   //VARS
   late var _questionsIndexSelected = 0;
   late String  _questionSelected = "What your color favorite?";
-  late List<String> answers =   ["Black", "Red", "Green", "White" ];
+  late List<Map<String,Object>> answers =   [
+    {"text":"Black", "point": 10 },
+    {"text": "Red", "point": 7},
+    {"text":"Green", "point": 3},
+    {"text":"White","point": 1},
+  ];
+  late int  _punctuation = 0;
 
   var questions = [
     {
@@ -19,7 +25,7 @@ class QuestionState extends State<QuestionApp>  {
         {"text":"Black", "point": 10 },
         {"text": "Red", "point": 7},
         {"text":"Green", "point": 3},
-        {"texst":"White","point": 1},
+        {"text":"White","point": 1},
       ],
     },
     {
@@ -42,15 +48,30 @@ class QuestionState extends State<QuestionApp>  {
     },
   ];
 
-  void handleAnswer() {
+  void handleRest() {
+    setState(() {
+      _questionsIndexSelected = 0;
+      _punctuation = 0;
+      answers =  [
+        {"text":"Black", "point": 10 },
+        {"text": "Red", "point": 7},
+        {"text":"Green", "point": 3},
+        {"text":"White","point": 1},
+      ];
+      _questionSelected = "What your color favorite?";
+    });
+  }
+
+  void handleAnswer(int punctuation) {
     setState(() {
         _questionsIndexSelected += 1;
+        _punctuation += punctuation;
         if (_questionsIndexSelected < questions.length) {
           //para alterar a view precisa colocar dentro do setState
           final  answerCurrent = questions[_questionsIndexSelected]["answer"] as List<Map<String,Object>>;
           //para realizar o cast em outras linguages e com o  as
           //aqui precisa realmente aplicar o cast()
-          answers =  answerCurrent.map((it) => it["text"]).toList().cast();
+          answers =  answerCurrent.map((it) => it).toList().cast();
           _questionSelected = questions[_questionsIndexSelected]["text"] as String;
         }
     });
@@ -69,7 +90,7 @@ class QuestionState extends State<QuestionApp>  {
         ),
         body: _questionsIndexSelected < questions.length  ?
            Quiz(answer: answers, question: _questionSelected, handleAnswer: handleAnswer)
-            : const Results("Congratulations")
+            :  Results(punctuation: _punctuation, handleRest: handleRest)
       ),
     );
   }

@@ -3,9 +3,9 @@ import "./anwser.dart";
 import "./question.dart";
 
 class Quiz extends StatelessWidget {
-  final List<String> answer;
+  final List<Map<String,Object>> answer;
   final String question;
-  final void Function() handleAnswer;
+  final void Function(int) handleAnswer;
 
   const Quiz({
     super.key,
@@ -23,7 +23,7 @@ class Quiz extends StatelessWidget {
         //identico e feito em aplicacoes React native e React js
         //diferenca que precisamos espalhar os valores com spreed operator
         ...answer.map((it) =>
-            Answer(it, handleAnswer),
+            Answer("${it["text"]}",()=> handleAnswer(it["point"] as int)),
         )
       ],
     );
