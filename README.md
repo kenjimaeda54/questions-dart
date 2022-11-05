@@ -144,7 +144,7 @@ class QuestionApp extends StatefulWidget {
 
 - Quando deseja realizar condições de renderização dinâmica e ideal usar um get 
 - Aqui também é possível aproveitar recurso do paradigma funcional e usar map para inteirar e reduzir código
-- Única diferença abaixo e que precisamos espalhar nossos Widget com spread operador, porque children e um array,se nao ficaria array com array
+- Única diferença abaixo, que precisamos espalhar nossos Widget com spread operador, porque children e um array, se não ficaria array dentro array
 
 ```dart
   final int punctuation;
